@@ -1,0 +1,95 @@
+name: Buildings
+tables:
+  - name: sample_50_bldgs
+    description: Inspected buildings with lat lon address and building attributes
+    base_table:
+      database: nyc_data
+      schema: source_data
+      table: sample_50_bldgs
+    primary_key:
+      columns:
+        - inspection_date
+        - latitude
+        - longitude
+    time_dimensions:
+      - name: inspection_date
+        expr: inspection_date
+        description: date of inspections
+        unique: false
+        data_type: date
+    measures:
+      - name: count_of_buildings
+        expr: count_of_buildings
+        description: number of buildings inspected
+        synonyms: ["buildings", "structures"]
+        default_aggregation: sum
+        data_type: number
+      - name: electrical_repair_costs
+        expr: electrical_repair_costs
+        description: costs of repairs to the electrical system
+        default_aggregation: sum
+        data_type: number
+      - name: plumbing_repair_costs
+        expr: plumbing_repair_costs
+        description: costs of repairs to the plumbing system
+        default_aggregation: sum
+        data_type: number  
+      - name: income
+        expr: income
+        data_type: number 
+        description: the median income of the neighborhood
+        default_aggregation: avg
+    dimensions:
+      - name: latitude
+        expr: latitude
+        data_type: number
+      - name: longitude
+        expr: longitude
+        data_type: number
+      - name: address
+        expr: address
+        data_type: varchar
+        synonyms: ["street"]
+        description: the address if of the building. use partial text search.
+      - name: bldg_type
+        expr: bldg_type
+        data_type: varchar
+      - name: stories
+        expr: stories
+        data_type: number
+      - name: elevators
+        expr: elevators
+        data_type: number
+      - name: general_condition
+        expr: general_condition
+        data_type: varchar
+      - name: age
+        expr: age
+        data_type: number
+      - name: electrical_system_condition
+        expr: electrical_system_condition
+        data_type: varchar
+      - name: electrical_system_description
+        expr: electrical_system_description
+        data_type: varchar
+        synonyms: ["electrical materials","electrical type"]
+      - name: plumbing_system_condition
+        expr: plumbing_system_condition
+        data_type: varchar
+      - name: plumbing_system_description
+        expr: plumbing_system_description
+        data_type: varchar
+        synonyms: ["plumbing materials","plumbing type", "pipe materials"]
+      - name: demographics
+        expr: demographics
+        data_type: varchar
+      - name: neighborhood
+        expr: neighborhood
+        data_type: varchar
+        description: the name of the neighborhood
+      - name: income_relative_to_nyc
+        expr: income_relative_to_nyc
+        data_type: varchar
+        description: the median income of the neighborhood relative to the median income of new york city
+custom_instructions: "For any address related queries, use the LIKE operator to find the address. Always include the latitude and longitude in any sub-query. All searches should be case-insensitive"
+    
